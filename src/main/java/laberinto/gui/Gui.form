@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="laberinto.gui.Gui">
-  <grid id="27dc6" binding="Principal" custom-create="true" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="principal" custom-create="true" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="84c7c" binding="Titulo" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="84c7c" binding="titulo" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -23,7 +23,7 @@
           </vspacer>
         </children>
       </grid>
-      <grid id="1fac9" binding="Tabla" custom-create="true" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="1fac9" binding="tabla" custom-create="true" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -31,7 +31,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="9c4cb" class="javax.swing.JLabel" binding="Nombre">
+          <component id="9c4cb" class="javax.swing.JLabel" binding="nombre">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -47,7 +47,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="a45d5" class="javax.swing.JLabel" binding="Vidas">
+          <component id="a45d5" class="javax.swing.JLabel" binding="vidas">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -55,7 +55,7 @@
               <text value="Vidas"/>
             </properties>
           </component>
-          <component id="c8a19" class="javax.swing.JLabel" binding="VidasValor">
+          <component id="c8a19" class="javax.swing.JLabel" binding="vidasValor">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -63,7 +63,7 @@
               <text value="3"/>
             </properties>
           </component>
-          <component id="aacf8" class="javax.swing.JLabel" binding="Puntuacion">
+          <component id="aacf8" class="javax.swing.JLabel" binding="puntuacion">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -71,7 +71,7 @@
               <text value="Puntuacion"/>
             </properties>
           </component>
-          <component id="74fc2" class="javax.swing.JLabel" binding="PuntuacionValor">
+          <component id="74fc2" class="javax.swing.JLabel" binding="puntuacionValor">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -79,7 +79,7 @@
               <text value="0"/>
             </properties>
           </component>
-          <component id="58948" class="javax.swing.JLabel" binding="RachaSinErrores">
+          <component id="58948" class="javax.swing.JLabel" binding="rachaSinErrores">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -87,7 +87,7 @@
               <text value="Rachas sin errores"/>
             </properties>
           </component>
-          <component id="5b5de" class="javax.swing.JLabel" binding="RachaValor">
+          <component id="5b5de" class="javax.swing.JLabel" binding="rachaValor">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -95,7 +95,7 @@
               <text value="0"/>
             </properties>
           </component>
-          <component id="1f2c7" class="javax.swing.JLabel" binding="TareasComp">
+          <component id="1f2c7" class="javax.swing.JLabel" binding="tareasComp">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -103,7 +103,7 @@
               <text value="Tareas completadas"/>
             </properties>
           </component>
-          <component id="96a44" class="javax.swing.JLabel" binding="TareasValor">
+          <component id="96a44" class="javax.swing.JLabel" binding="tareasValor">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -111,7 +111,7 @@
               <text value="0"/>
             </properties>
           </component>
-          <component id="be60f" class="javax.swing.JLabel" binding="ObraSelec">
+          <component id="be60f" class="javax.swing.JLabel" binding="obraSelec">
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -119,7 +119,7 @@
               <text value="Obra seleccionada"/>
             </properties>
           </component>
-          <component id="b4d5e" class="javax.swing.JLabel" binding="ObraValor">
+          <component id="b4d5e" class="javax.swing.JLabel" binding="obraValor">
             <constraints>
               <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -129,7 +129,7 @@
           </component>
         </children>
       </grid>
-      <grid id="37d54" binding="PanelBotones" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="37d54" binding="panelBotones" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>

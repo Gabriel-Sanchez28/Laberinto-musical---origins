@@ -27,23 +27,23 @@ public class Gui extends JFrame {
     static final Font FUENTE_BOTON    = new Font("Georgia", Font.BOLD, 18);
 
     // Componentes
-    private JPanel Principal;
-    private JPanel Titulo;
-    private JPanel Tabla;
-    private JPanel PanelBotones;
+    private JPanel principal;
+    private JPanel titulo;
+    private JPanel tabla;
+    private JPanel panelBotones;
 
-    private JLabel Nombre;
+    private JLabel nombre;
     private JTextField textField1; // campo del nombre
-    private JLabel Vidas;
-    private JLabel VidasValor; // muestra el número de vidas
-    private JLabel Puntuacion;// valor de puntuacion
-    private JLabel PuntuacionValor;
-    private JLabel RachaSinErrores;
-    private JLabel RachaValor; //racha sin errores
-    private JLabel TareasComp;
-    private JLabel TareasValor; //valor de tareas completas
-    private JLabel ObraSelec;
-    private JLabel ObraValor; //obra seleccionada
+    private JLabel vidas;
+    private JLabel vidasValor; // muestra el número de vidas
+    private JLabel puntuacion;// valor de puntuacion
+    private JLabel puntuacionValor;
+    private JLabel rachaSinErrores;
+    private JLabel rachaValor; //racha sin errores
+    private JLabel tareasComp;
+    private JLabel tareasValor; //valor de tareas completas
+    private JLabel obraSelec;
+    private JLabel obraValor; //obra seleccionada
 
     private JButton buttonComenzar;
     private JButton buttonSalida;
@@ -55,9 +55,9 @@ public class Gui extends JFrame {
 
     //crear componentes
     private void createUIComponents() {
-        Principal = new PanelFondo();
-        Titulo = new TituloOrnamental("LABERINTO MUSICAL - ORIGINS");
-        Tabla = new PanelTabla();
+        principal = new PanelFondo();
+        titulo = new TituloOrnamental("LABERINTO MUSICAL - ORIGINS");
+        tabla = new PanelTabla();
         buttonComenzar = new BotonOrnamental("COMENZAR");
         buttonSalida = new BotonOrnamental("SALIR");
     }
@@ -65,9 +65,9 @@ public class Gui extends JFrame {
     //configuracion de la ventana
     private void configuracion() {
         setTitle("Laberinto musical - Origins");
-        Titulo.setBorder(null);
+        titulo.setBorder(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setContentPane(Principal);
+        setContentPane(principal);
         estilizarComponentes();
         setSize(660, 530);
         setResizable(false);
@@ -84,26 +84,26 @@ public class Gui extends JFrame {
 
     // Colores, fuentes y márgenes de componentes
     private void estilizarComponentes() {
-        Principal.setBorder(BorderFactory.createEmptyBorder(24, 40, 24, 40));
-        Tabla.setBorder(BorderFactory.createEmptyBorder(16, 28, 16, 28));
-        PanelBotones.setOpaque(false);
+        principal.setBorder(BorderFactory.createEmptyBorder(24, 40, 24, 40));
+        tabla.setBorder(BorderFactory.createEmptyBorder(16, 28, 16, 28));
+        panelBotones.setOpaque(false);
 
-        for (JLabel etiqueta : new JLabel[]{Nombre, Vidas, Puntuacion, RachaSinErrores, TareasComp, ObraSelec}) {
+        for (JLabel etiqueta : new JLabel[]{nombre, vidas, puntuacion, rachaSinErrores, tareasComp, obraSelec}) {
             etiqueta.setFont(FUENTE_ETIQUETA);
             etiqueta.setForeground(SALMON);
         }
-        for (JLabel valor : new JLabel[]{VidasValor, PuntuacionValor, RachaValor, TareasValor, ObraValor}) {
+        for (JLabel valor : new JLabel[]{vidasValor, puntuacionValor, rachaValor, tareasValor, obraValor}) {
             valor.setFont(FUENTE_VALOR);
             valor.setForeground(CREMA);
         }
         estilizarCampo(textField1);
 
         //ajustar para que sean cambiantes con un metodo de verificacion
-        VidasValor.setText("3");
-        PuntuacionValor.setText("0");
-        RachaValor.setText("0");
-        TareasValor.setText("0 / 0");
-        ObraValor.setText("Ninguna");
+        vidasValor.setText("3");
+        puntuacionValor.setText("0");
+        rachaValor.setText("0");
+        tareasValor.setText("0 / 0");
+        obraValor.setText("Ninguna");
     }
 
     //estilo campo de nombre
@@ -130,13 +130,13 @@ public class Gui extends JFrame {
 
     // Métodos para actualizar los valores desde el resto del jueg (pruebas no finales)
     public String getNombre()                    { return textField1.getText().trim(); }
-    public void setVidas(int vidas)              { VidasValor.setText(String.valueOf(vidas)); }
-    public void setPuntuacion(int puntos)        { PuntuacionValor.setText(String.valueOf(puntos)); }
-    public void setRacha(int racha)              { RachaValor.setText(String.valueOf(racha)); }
-    public void setTareas(int hechas, int total) { TareasValor.setText(hechas + " / " + total); }
-    public void setObraSeleccionada(String obra) { ObraValor.setText(obra); }
+    public void setVidas(int vidas)              { vidasValor.setText(String.valueOf(vidas)); }
+    public void setPuntuacion(int puntos)        { puntuacionValor.setText(String.valueOf(puntos)); }
+    public void setRacha(int racha)              { rachaValor.setText(String.valueOf(racha)); }
+    public void setTareas(int hechas, int total) { tareasValor.setText(hechas + " / " + total); }
+    public void setObraSeleccionada(String obra) { obraValor.setText(obra); }
 
-    public static void main(String[] args) {
+     static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Gui().setVisible(true));
     }
 
