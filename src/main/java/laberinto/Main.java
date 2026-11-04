@@ -1,6 +1,7 @@
 package laberinto;
 
-import main.java.co.laberinto.juego.Jugador;
+
+import laberinto.juego.Jugador;
 
 import java.util.Scanner;
 
