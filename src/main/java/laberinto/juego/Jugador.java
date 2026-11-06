@@ -29,6 +29,7 @@ public class Jugador {
     public int getFila() {return fila;}
     public int getColumna() {return columna;}
     public String getObraSeleccionada() {return obraSeleccionada;}
+
     public void setNombre(String nombre) {this.nombre = nombre;}
     public void setObraSeleccionada(String obraSeleccionada) {this.obraSeleccionada = obraSeleccionada;}
     public void sumarPuntos(int puntos) {puntuacion += puntos;}
