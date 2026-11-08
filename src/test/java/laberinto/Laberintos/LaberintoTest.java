@@ -17,11 +17,18 @@ class LaberintoTest {
 
     @Test
     void generarNuevoMapa() {
-
+        assertDoesNotThrow(() -> {
+            this.laberinto.generarNuevoMapa();
+        }, "el metodo no funciona correctamente");
     }
 
     @Test
     void siguienteNivel() {
+        assertDoesNotThrow(() -> {
+            this.laberinto.siguienteNivel();
+        }, "el metodo no funciona correctamente");
+        int nivel = laberinto.obtenerNivel();
+        assertEquals(2,nivel);
     }
 
     @Test
@@ -40,17 +47,25 @@ class LaberintoTest {
 
     @Test
     void esMeta() {
+        boolean meta = laberinto.esMeta(3,3);
+        assertEquals(false, meta);
     }
 
     @Test
     void obtenerFilas() {
+        int fila = laberinto.obtenerFilas();
+        assertEquals(10,fila);
     }
 
     @Test
     void obtenerColumnas() {
+        int columna = laberinto.obtenerColumnas();
+        assertEquals(10,columna);
     }
 
     @Test
     void obtenerNivel() {
+        int nivel = laberinto.obtenerNivel();
+        assertEquals(1,nivel);
     }
 }
