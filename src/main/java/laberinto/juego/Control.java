@@ -9,7 +9,7 @@ import java.awt.event.KeyListener;
 import java.util.Scanner;
 
 public class Control implements KeyListener {
-    private final static int teclado = 120;
+    private final static int teclado = 256;
     private final boolean[] teclas = new boolean[teclado];
 
     private boolean arriba, abajo, izquierda, derecha;
