@@ -33,6 +33,7 @@ public class Jugador {
     public void setNombre(String nombre) {this.nombre = nombre;}
     public void setObraSeleccionada(String obraSeleccionada) {this.obraSeleccionada = obraSeleccionada;}
     public void sumarPuntos(int puntos) {puntuacion += puntos;}
+
     public void perderVida() {if (vida > 0) {vida--;}}
     public void aumentarRacha() {rachaSinErrores++;}
     public void reiniciarRacha() {rachaSinErrores = 0;}
