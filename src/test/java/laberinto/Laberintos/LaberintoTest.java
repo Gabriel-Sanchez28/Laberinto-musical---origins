@@ -56,31 +56,61 @@ class LaberintoTest {
     }
 
     @Test
-    void siguienteNivel() {
-        assertDoesNotThrow(() -> {
-            this.laberinto.siguienteNivel();
-        }, "el metodo no funciona correctamente");
-        int nivel = laberinto.obtenerNivel();
-        assertEquals(2,nivel);
+    void siguienteNivelTest() {
+        for (int i = 1; i < 11; i++) {
+            int nivel = laberinto.obtenerNivel();
+            assertEquals(i,nivel);
+            laberinto.siguienteNivel();
+        }
     }
 
     @Test
-    void obtenerCelda() {
-        Laberinto laberinto = new Laberinto(filas,columnas);
-        assertEquals(0, laberinto.obtenerCelda(2, 3),
-                "La celda de inicio (1,1) debería retornar siempre 0");
+    void obtenerCeldaNegativasTest() {
+        assertEquals(1, laberinto.obtenerCelda(-1, 5), "Fila negativa (-1) debe retornar 1");
+        assertEquals(1, laberinto.obtenerCelda(5, -1), "Columna negativa (-1) debe retornar 1");
+        assertEquals(1, laberinto.obtenerCelda(-5, -5), "Ambas coordenadas negativas deben retornar 1");
     }
 
     @Test
-    void esTransitable() {
-        boolean transitable = laberinto.esTransitable(3,3);
-        assertEquals(true, transitable,
-                "La celda de inicio (1,1) debería retornar siempre true");
+    void obtenerCeldaLimitesTest(){
+        assertEquals(1, laberinto.obtenerCelda(filas, 5), "Fila igual al límite superior debe retornar 1");
+        assertEquals(1, laberinto.obtenerCelda(5, columnas), "Columna igual al límite superior debe retornar 1");
+        assertEquals(1, laberinto.obtenerCelda(filas + 3, columnas + 3), "Coordenadas muy por encima del límite deben retornar 1");
     }
 
     @Test
-    void esMeta() {
-        boolean meta = laberinto.esMeta(3,3);
+    void obtenerCeldaValidasTest(){
+        assertEquals(0, laberinto.obtenerCelda(1, 1), "La celda [1][1] debe retornar 0");
+        assertEquals(3, laberinto.obtenerCelda(filas - 2, columnas - 2), "La celda de la meta debe retornar 3");
+        assertEquals(1, laberinto.obtenerCelda(0, 0), "La celda [0][0] debe retornar 1");
+    }
+
+    @Test
+    void esTransitableTest() {
+        boolean transitable = laberinto.esTransitable(1,1);
+        assertEquals(0,laberinto.obtenerCelda(1,1));
+        assertEquals(true, transitable,"La celda de inicio (1,1) debería retornar siempre true");
+        boolean transitable2 = laberinto.esTransitable(8,8);
+        assertEquals(3,laberinto.obtenerCelda(8,8));
+        assertEquals(true, transitable,"La celda de inicio (8,8) debería retornar siempre true");
+    }
+
+    @Test
+    void esTransitableNoTransitableTest() {
+        boolean transitable = laberinto.esTransitable(0,0);
+        assertEquals(1,laberinto.obtenerCelda(0,0));
+        assertEquals(false, transitable,"La celda de inicio (0,0) debería retornar siempre true");
+    }
+
+    @Test
+    void esMetaTest() {
+        boolean meta = laberinto.esMeta(8,8);
+        assertEquals(true, meta);
+    }
+
+    @Test
+    void NoEsMetaTest() {
+        boolean meta = laberinto.esMeta(3,8);
         assertEquals(false, meta);
     }
 
