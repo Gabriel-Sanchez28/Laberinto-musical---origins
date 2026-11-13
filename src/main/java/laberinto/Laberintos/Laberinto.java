@@ -7,6 +7,7 @@ public class Laberinto {
     private int nivel;
     private int filas;
     private int columnas;
+
     public Laberinto(int filas, int columnas) {
         this.filas = filas;
         this.columnas = columnas;
@@ -14,16 +15,19 @@ public class Laberinto {
         this.nivel = 1;
         generarNuevoMapa();
     }
+
     public void generarNuevoMapa() {
         Random random = new Random();
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
+        //creacion de bordes
+        for (int i = 0; i < filas; i++) { //filas
+            for (int j = 0; j < columnas; j++) { //columnas
                 if (i == 0 || i == filas - 1 || j == 0 || j == columnas - 1) {
-                    mapa[i][j] = 1;
-                } else {mapa[i][j] = 0;}
+                    mapa[i][j] = 1; //pared
+                } else {mapa[i][j] = 0;} //espacio libre
             }
         }
 
+        //obstacylos
         int cantidadObstaculos = nivel + 2;
         for (int i = 0; i < cantidadObstaculos; i++) {
             int fila = random.nextInt(filas - 2) + 1;
@@ -32,10 +36,11 @@ public class Laberinto {
                 mapa[fila][columna] = 1;
             }
         }
+        //limpieza de corredor
         for (int j = 1; j < columnas - 1; j++) {mapa[1][j] = 0;}
         for (int i = 1; i < filas - 1; i++) {mapa[i][columnas - 2] = 0;}
-        mapa[1][1] = 0;
-        mapa[filas - 2][columnas - 2] = 3;
+        mapa[1][1] = 0; // inicio
+        mapa[filas - 2][columnas - 2] = 3; // meta
     }
 
     public void siguienteNivel() {
