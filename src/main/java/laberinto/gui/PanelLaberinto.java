@@ -95,7 +95,10 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         mostrarBanner("Nivel " + laberinto.obtenerNivel(), "WASD o flechas para moverte", 3.0);
     }
 
-    private void mostrarBanner(String s, String wasdOFlechasParaMoverte, double v) {
+    private void mostrarBanner(String titulo, String subtitulo, double segundos) {
+        bannerTitulo = titulo;
+        bannerSubtitulo = subtitulo;
+        bannerRestante = segundos;
     }
 
     @Override
