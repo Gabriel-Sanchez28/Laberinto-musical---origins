@@ -5,5 +5,5 @@ public enum EstadoJuego {
     LABERINTO,
     PUZZLE,
     VICTORIA,
-    DERROTA
+    DERROTA,
 }
