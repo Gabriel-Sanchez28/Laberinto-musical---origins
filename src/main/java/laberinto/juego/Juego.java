@@ -7,6 +7,24 @@ public class Juego {
     private Laberinto laberinto;
     private EstadoJuego estado;
 
+    public Jugador getJugador() {
+        return jugador;
+    }
+
+    public Laberinto getLaberinto() {
+        return laberinto;
+    }
+
+    public EstadoJuego getEstado() {
+        return estado;
+    }
+
+    public Juego(Jugador jugador, Laberinto laberinto) {
+        this.jugador = jugador;
+        this.laberinto = laberinto;
+        this.estado = EstadoJuego.LABERINTO;
+    }
+
     public void iniciar(){}
     public void mostrarMenu(){}
     public void seleccionarObra(){}
