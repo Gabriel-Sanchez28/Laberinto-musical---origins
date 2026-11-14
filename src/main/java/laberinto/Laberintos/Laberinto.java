@@ -73,4 +73,11 @@ public class Laberinto {
     public int obtenerNivel() {
         return nivel;
     }
+
+    public void cargarMapa(){}
+
+    public void limpiarMapa(){}
+
+    public void colocarjugador(){}
+
 }
