@@ -1,5 +1,7 @@
 package laberinto.gui;
 
+import laberinto.juego.Juego;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Path2D;
@@ -126,6 +128,11 @@ public class Gui extends JFrame {
             textField1.requestFocusInWindow();
         }
         //hacer ajustes para que dirija al juego
+        try {
+            Juego juego = Juego.iniciar(nombre);
+        }catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     // Métodos para actualizar los valores desde el resto del jueg (pruebas no finales)

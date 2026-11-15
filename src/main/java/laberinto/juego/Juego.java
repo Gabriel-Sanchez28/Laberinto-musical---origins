@@ -38,8 +38,20 @@ public class Juego {
     public boolean jugadorEnMeta() {
         return laberinto.esMeta(jugador.getFila(), jugador.getColumna());
     }
+    // ... (tus variables y constructor actual se quedan igual) ...
 
-    public void iniciar(){}
+    public static Juego iniciar(String nombreJugador){
+        if (nombreJugador == null || nombreJugador.trim().isEmpty()) {
+        throw new IllegalArgumentException("El nombre del jugador no puede estar vacío");
+    }
+        //Crear al jugador
+        Jugador jugador = new Jugador(nombreJugador.trim());
+
+        //Crear laberinto nicel 1
+        Laberinto laberinto = new Laberinto(10, 10);
+
+        return new Juego(jugador, laberinto);
+    }
     public void mostrarMenu(){}
     public void seleccionarObra(){}
     public void explorar(){}
