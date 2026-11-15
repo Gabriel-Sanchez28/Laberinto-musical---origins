@@ -22,6 +22,19 @@ public class Juego {
         this.laberinto = laberinto;
         this.estado = EstadoJuego.LABERINTO;
     }
+    //validar que se este en el labretino
+    public boolean intentarMover(int deltaFila, int deltaColumna) {
+        if (estado != EstadoJuego.LABERINTO) {return false;}
+        if (Math.abs(deltaFila) + Math.abs(deltaColumna) != 1) {return false;}
+
+        int fila = jugador.getFila() + deltaFila;
+        int columna = jugador.getColumna() + deltaColumna;
+        if (!laberinto.esTransitable(fila, columna)) {return false;}
+
+        jugador.cambiarPosicion(fila, columna);
+        return true;
+    }
+
 
     public void iniciar(){}
     public void mostrarMenu(){}
