@@ -130,6 +130,8 @@ public class Gui extends JFrame {
         //hacer ajustes para que dirija al juego
         try {
             Juego juego = Juego.iniciar(nombre);
+            new VentanaJuego(juego).setVisible(true);
+            dispose();
         }catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
