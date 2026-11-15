@@ -35,6 +35,9 @@ public class Juego {
         return true;
     }
 
+    public boolean jugadorEnMeta() {
+        return laberinto.esMeta(jugador.getFila(), jugador.getColumna());
+    }
 
     public void iniciar(){}
     public void mostrarMenu(){}

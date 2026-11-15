@@ -1,12 +1,16 @@
 package laberinto;
 
 
+import laberinto.gui.Gui;
 import laberinto.juego.Jugador;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        SwingUtilities.invokeLater(()-> new Gui().setVisible(true));
+        /*
         Scanner scanner = new Scanner(System.in);
         int opcion;
         System.out.println("--------------------------------");
@@ -86,5 +90,6 @@ public class Main {
         System.out.println("H  - Consultar ayuda durante la partida");
         System.out.println("ESC - Pausar o volver al menu");
         System.out.println("------------------------------------");
+        */
     }
 }
