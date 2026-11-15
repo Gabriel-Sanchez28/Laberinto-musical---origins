@@ -275,7 +275,7 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         g.setColor(new Color(0, 0, 0, 70));
         g.fill(new Ellipse2D.Double(centroX - 13, pies - 5, 26, 9));
 
-        BufferedImage sprite = spriteSegunMirada();
+        BufferedImage sprite = segunMirada();
         if (sprite != null) {
             int alto = (int) (celda * 1.1); // todas las vistas se dibujan a la misma altura
             int ancho = Math.round(alto * sprite.getWidth() / (float) sprite.getHeight());
@@ -286,7 +286,7 @@ public class PanelLaberinto extends JPanel implements ActionListener {
             } else {
                 g.drawImage(sprite, x, y, ancho, alto, null);
             }
-        }  else { // sin imagen: circulo de emergencia para poder seguir probando
+        }  else { // circulo de emergencia para poder seguir probando
             g.setColor(Gui.ROJO_CLARO);
             g.fill(new Ellipse2D.Double(centroX - 14, pies - 34 - salto, 28, 34));
         }
