@@ -77,6 +77,11 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         this.juego = juego;
         //cargar diseños
         BufferedImage piso = cargarImagen("/img/piso.png");
+        if (piso == null){
+            this.texturaPiso = null;
+        }else {
+            this.texturaPiso = escalarSuave(piso, celdasPortextura * celda, celdasPortextura * celda);
+        }
         this.posEspalda = cargarImagen("/img/jugador_espalda");
         this.posFrente = cargarImagen("/img/jugador_frente");
         this.posLado = cargarImagen("/img/jugador_lado");
@@ -96,6 +101,48 @@ public class PanelLaberinto extends JPanel implements ActionListener {
             }
         });
         mostrarBanner("Nivel " + laberinto.obtenerNivel(), "WASD o flechas para moverte", 3.0);
+    }
+
+    public void addNotify() {
+        super.addNotify();
+        ultimoTick = System.nanoTime();
+        timer.start();
+        requestFocusInWindow();
+    }
+
+    @Override
+    public void removeNotify() {
+        timer.stop();
+        super.removeNotify();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        long ahora = System.nanoTime();
+        double dt = Math.min((ahora - ultimoTick) / 1e9, 0.05); // evita saltos si la ventana se congela
+        ultimoTick = ahora;
+        actualizar(dt);
+        repaint();
+    }
+
+    private void actualizar(double dt) {
+        control.actualizar();
+        if (bannerRestante > 0) {
+            bannerRestante -= dt;
+        }
+
+        if (enMovimiento) {
+            progreso += dt / segundosCelda;
+            if (progreso >= 1) {
+                enMovimiento = false;
+                progreso = 0;
+                if (juego.jugadorEnMeta()) {
+                    // Provisional: cuando existan los puzzles, aqui debe pasar al estado PUZZLE (RQ09)
+                    juego.avanzarNivel();
+                    mostrarBanner("Nivel " + juego.getLaberinto().obtenerNivel(), "", 1.4);
+                }
+            }
+        }
     }
 
     private void mostrarBanner(String titulo, String subtitulo, double segundos) {
@@ -291,10 +338,88 @@ public class PanelLaberinto extends JPanel implements ActionListener {
             g.fill(new Ellipse2D.Double(centroX - 14, pies - 34 - salto, 28, 34));
         }
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-
+    //ajuste de mirada de personaje
+    private BufferedImage segunMirada() {
+        BufferedImage posicion = switch (mirada) {
+            case ABAJO -> posFrente;
+            case ARRIBA -> posEspalda;
+            case IZQUIERDA, DERECHA -> posLado;
+        };
+        if (posicion != null){
+            return posicion;
+        }else {
+            return posLado;
+        }
     }
+
+    private void dibujarBanner(Graphics2D g, int ancho, int alto) {
+        if (bannerRestante <= 0) {return;}
+        float opacidad = (float) Math.min(1.0, bannerRestante / 0.5);
+
+        int cajaAncho = 340;
+        int cajaAlto = bannerSubtitulo.isEmpty() ? 64 : 92;
+        int x = (ancho - cajaAncho) / 2;
+        int y = (alto - cajaAlto) / 2;
+
+        Composite anterior = g.getComposite();
+        g.setComposite(AlphaComposite.SrcOver.derive(opacidad));
+        g.setColor(new Color(Gui.FONDO_BORDE.getRed(), Gui.FONDO_BORDE.getGreen(), Gui.FONDO_BORDE.getBlue(), 225));
+        g.fillRoundRect(x, y, cajaAncho, cajaAlto, 22, 22);
+        g.setColor(Gui.COBRE_CLARO);
+        g.setStroke(new BasicStroke(2f));
+        g.drawRoundRect(x, y, cajaAncho, cajaAlto, 22, 22);
+
+        g.setFont(Gui.FUENTE_TITULO);
+        g.setColor(Gui.CREMA);
+        centrarTexto(g, bannerTitulo, ancho / 2, y + 42);
+        if (!bannerSubtitulo.isEmpty()) {
+            g.setFont(Gui.FUENTE_VALOR.deriveFont(15f));
+            g.setColor(Gui.SALMON);
+            centrarTexto(g, bannerSubtitulo, ancho / 2, y + 72);
+        }
+        g.setComposite(anterior);
+    }
+
+    private static void centrarTexto(Graphics2D g, String texto, int centroX, int baseY) {
+        g.drawString(texto, centroX - g.getFontMetrics().stringWidth(texto) / 2, baseY);
+    }
+    //vidas
+    private static void dibujarCorazon(Graphics2D g, float x, float y, float s, boolean lleno) {
+        Path2D.Float corazon = new Path2D.Float();
+        corazon.moveTo(x + s / 2, y + s);
+        corazon.curveTo(x - s * 0.25f, y + s * 0.55f, x + s * 0.05f, y - s * 0.15f, x + s / 2, y + s * 0.28f);
+        corazon.curveTo(x + s * 0.95f, y - s * 0.15f, x + s * 1.25f, y + s * 0.55f, x + s / 2, y + s);
+        corazon.closePath();
+        if (lleno) {
+            g.setColor(Gui.ROJO_CLARO);
+            g.fill(corazon);
+        }
+        g.setColor(lleno ? Gui.ROJO_OSCURO : Gui.COBRE_OSCURO);
+        g.setStroke(new BasicStroke(1.6f));
+        g.draw(corazon);
+    }
+    //escalar imagenes
+    private static BufferedImage escalarSuave(BufferedImage origen, int ancho, int alto) {
+        BufferedImage actual = origen;
+        int w = origen.getWidth();
+        int h = origen.getHeight();
+        while (w / 2 >= ancho && h / 2 >= alto) {
+            w /= 2;
+            h /= 2;
+            actual = escalarUnPaso(actual, w, h);
+        }
+        return escalarUnPaso(actual, ancho, alto);
+    }
+
+    //cambiar tamaño
+    private static BufferedImage escalarUnPaso(BufferedImage origen, int ancho, int alto) {
+        BufferedImage destino = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_ARGB); //lienzo
+        Graphics2D g = destino.createGraphics(); //pincel
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); //una sola vez
+        g.drawImage(origen, 0, 0, ancho, alto, null);
+        g.dispose();
+        return destino;
+    }
+
 }

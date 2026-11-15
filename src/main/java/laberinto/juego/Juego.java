@@ -5,16 +5,14 @@ import laberinto.Laberintos.Laberinto;
 public class Juego {
     private Jugador jugador;
     private Laberinto laberinto;
-    private EstadoJuego estado;
+    private EstadoJuego estado = EstadoJuego.LABERINTO;
 
     public Jugador getJugador() {
         return jugador;
     }
-
     public Laberinto getLaberinto() {
         return laberinto;
     }
-
     public EstadoJuego getEstado() {
         return estado;
     }
