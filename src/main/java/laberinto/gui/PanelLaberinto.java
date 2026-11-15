@@ -3,6 +3,7 @@ package laberinto.gui;
 import laberinto.Laberintos.Laberinto;
 import laberinto.juego.Control;
 import laberinto.juego.Juego;
+import laberinto.juego.Jugador;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -130,6 +134,7 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         g2.dispose(); //liberar recursos
     }
 
+
     private void reconstruirMapa() {
         Laberinto laberinto = juego.getLaberinto();
         int filas = laberinto.obtenerFilas();
@@ -213,6 +218,78 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         g.fillRect(x, y, celda, 14);
         g.setColor(Gui.FONDO_BORDE);
         g.fillRect(x, y + celda - 3, celda, 3);
+    }
+
+    private void dibujarMeta(Graphics2D g, double segundos) {
+        float cx = metaColumna * celda + celda / 2f;
+        float cy = metaFila * celda + celda / 2f;
+        //oscilacion
+        float pulso = (float) (0.5 + 0.5 * Math.sin(segundos * 3));
+        float radio = celda * 0.62f + pulso * 4f;
+
+        //aura
+        Color centro = new Color(Gui.GEMA_CLARA.getRed(), Gui.GEMA_CLARA.getGreen(), Gui.GEMA_CLARA.getBlue(), 210);
+        Color borde = new Color(Gui.GEMA_CLARA.getRed(), Gui.GEMA_CLARA.getGreen(), Gui.GEMA_CLARA.getBlue(), 0);
+        g.setPaint(new RadialGradientPaint(new Point2D.Float(cx, cy), radio,
+                new float[]{0f, 1f}, new Color[]{centro, borde}));
+        g.fill(new Ellipse2D.Float(cx - radio, cy - radio, radio * 2, radio * 2));
+
+        g.setColor(Gui.GEMA_CLARA);
+        g.fill(rombo(cx, cy, 12 + pulso * 2));
+        g.setColor(Gui.GEMA_OSCURA);
+        g.setStroke(new BasicStroke(2f));
+        g.draw(rombo(cx, cy, 12 + pulso * 2));
+        g.setColor(Gui.CREMA);
+        g.fill(rombo(cx, cy, 5));
+    }
+
+    //creacion del icono de diamante
+    private static Path2D.Float rombo(float cx, float cy, float r) {
+        Path2D.Float p = new Path2D.Float();
+        p.moveTo(cx, cy - r);
+        p.lineTo(cx + r * 0.75f, cy);
+        p.lineTo(cx, cy + r);
+        p.lineTo(cx - r * 0.75f, cy);
+        p.closePath();
+        return p;
+    }
+
+    private void dibujarJugador(Graphics2D g) {
+        //Posicion de jugador
+        Jugador jugador = juego.getJugador();
+        double fila = jugador.getFila();
+        double columna = jugador.getColumna();
+
+        //movimiento del jugador
+        if (enMovimiento) {
+            fila = origenFila + (fila - origenFila) * progreso;
+            columna = origenColumna + (columna - origenColumna) * progreso;
+        }
+
+        //centrado en la casilla
+        double centroX = columna * celda + celda / 2.0;
+        double pies = fila * celda + celda - 6;
+        double salto = enMovimiento ? Math.abs(Math.sin(progreso * Math.PI)) * 3 : 0; //salto al caminar
+
+        //sombra
+        g.setColor(new Color(0, 0, 0, 70));
+        g.fill(new Ellipse2D.Double(centroX - 13, pies - 5, 26, 9));
+
+        BufferedImage sprite = spriteSegunMirada();
+        if (sprite != null) {
+            int alto = (int) (celda * 1.1); // todas las vistas se dibujan a la misma altura
+            int ancho = Math.round(alto * sprite.getWidth() / (float) sprite.getHeight());
+            int x = (int) Math.round(centroX - ancho / 2.0);
+            int y = (int) Math.round(pies - alto - salto) + 2;
+            if (mirada == Direccion.DERECHA) {
+                g.drawImage(sprite, x + ancho, y, -ancho, alto, null); // ancho negativo = espejo
+            } else {
+                g.drawImage(sprite, x, y, ancho, alto, null);
+            }
+        }  else { // sin imagen: circulo de emergencia para poder seguir probando
+            g.setColor(Gui.ROJO_CLARO);
+            g.fill(new Ellipse2D.Double(centroX - 14, pies - 34 - salto, 28, 34));
+        }
     }
 
     @Override
