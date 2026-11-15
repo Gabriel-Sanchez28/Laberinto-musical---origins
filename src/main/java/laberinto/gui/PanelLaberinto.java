@@ -138,7 +138,7 @@ public class PanelLaberinto extends JPanel implements ActionListener {
                 progreso = 0;
                 if (juego.jugadorEnMeta()) {
                     // Provisional: cuando existan los puzzles, aqui debe pasar al estado PUZZLE (RQ09)
-                    juego.avanzarNivel();
+                    //juego.avanzarNivel();
                     mostrarBanner("Nivel " + juego.getLaberinto().obtenerNivel(), "", 1.4);
                 }
             }
@@ -179,6 +179,34 @@ public class PanelLaberinto extends JPanel implements ActionListener {
 
         dibujarBarraSuperior(g2, getWidth());
         g2.dispose(); //liberar recursos
+    }
+
+    private void dibujarBarraSuperior(Graphics2D g, int ancho) {
+        Jugador jugador = juego.getJugador();
+
+        g.setPaint(new GradientPaint(0, 0, Gui.FONDO_CENTRO, 0, altoBarraSup, Gui.FONDO_BORDE));
+        g.fillRect(0, 0, ancho, altoBarraSup);
+        g.setColor(Gui.COBRE_CLARO);
+        g.fillRect(0, altoBarraSup - 3, ancho, 3);
+
+        // fila 1: nombre y nivel
+        g.setFont(Gui.FUENTE_ETIQUETA);
+        g.setColor(Gui.SALMON);
+        g.drawString(jugador.getNombre(), 14, 26);
+        String nivel = "Nivel " + juego.getLaberinto().obtenerNivel();
+        g.drawString(nivel, ancho - 14 - g.getFontMetrics().stringWidth(nivel), 26);
+
+        // fila 2: vidas y estadisticas
+        int casillas = Math.max(3, jugador.getVida());
+        for (int i = 0; i < casillas; i++) {
+            dibujarCorazon(g, 14 + i * 26, 34, 20, i < jugador.getVida());
+        }
+        String estadisticas = "Puntos " + jugador.getPuntuacion()
+                + "   Racha " + jugador.getRachaSinErrores()
+                + "   Fragmentos " + jugador.getTareasCompletadas();
+        g.setFont(Gui.FUENTE_VALOR.deriveFont(14f));
+        g.setColor(Gui.CREMA);
+        g.drawString(estadisticas, ancho - 14 - g.getFontMetrics().stringWidth(estadisticas), 50);
     }
 
 
