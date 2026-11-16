@@ -29,6 +29,14 @@ public class PanelLaberinto extends JPanel implements ActionListener {
     //Movimiento por casilla
     private static final double segundosCelda =0.18;
 
+    // Carpeta de las imagenes dentro de src/main/resources ("/" = directamente en resources)
+    private static final String rutaImagenes = "/";
+
+    // Los PNG del personaje son lienzos de 500x500 con margen transparente. Estas medidas (como fraccion del
+    // alto del lienzo) sirven para escalar las 3 vistas por igual y apoyar las botas en el suelo.
+    private static final double personajeAlto = 0.76; // de la cabeza a las botas
+    private static final double piesAltura = 0.886;   // fila donde terminan las botas
+
     //Tipos de celda
     private static final int pared = 1;
     private static final  int meta = 3;
@@ -67,24 +75,38 @@ public class PanelLaberinto extends JPanel implements ActionListener {
 
     public static BufferedImage cargarImagen(String ruta){
         try (InputStream lugar = PanelLaberinto.class.getResourceAsStream(ruta)) {
-            if(lugar == null){ return null; }else{return ImageIO.read(lugar);}
+            if(lugar == null){
+                System.err.println("No se encontro la imagen " + ruta + " (revisa src/main/resources)");
+                return null;
+            }
+            return ImageIO.read(lugar);
         } catch (IOException e) {
+            System.err.println("No se pudo leer la imagen " + ruta + ": " + e.getMessage());
             return null;
         }
+    }
+
+    //escala un sprite una sola vez (al cargar) para dibujarlo luego 1 a 1, sin deformarlo
+    private static BufferedImage prepararSprite(BufferedImage original) {
+        if (original == null) {return null;}
+        double escala = (celda * 1.1) / (original.getHeight() * personajeAlto);
+        int ancho = (int) Math.round(original.getWidth() * escala);
+        int alto = (int) Math.round(original.getHeight() * escala);
+        return escalarSuave(original, ancho, alto);
     }
 
     public PanelLaberinto(Juego juego) {
         this.juego = juego;
         //cargar diseños
-        BufferedImage piso = cargarImagen("/img/piso.png");
+        BufferedImage piso = cargarImagen(rutaImagenes + "piso.png");
         if (piso == null){
             this.texturaPiso = null;
         }else {
             this.texturaPiso = escalarSuave(piso, celdasPortextura * celda, celdasPortextura * celda);
         }
-        this.posEspalda = cargarImagen("/img/jugador_espalda");
-        this.posFrente = cargarImagen("/img/jugador_frente");
-        this.posLado = cargarImagen("/img/jugador_lado");
+        this.posEspalda = prepararSprite(cargarImagen(rutaImagenes + "jugador_espalda.png"));
+        this.posFrente = prepararSprite(cargarImagen(rutaImagenes + "jugador_frente.png"));
+        this.posLado = prepararSprite(cargarImagen(rutaImagenes + "jugador_lado.png"));
 
         //dimensiones del laberinto
         Laberinto laberinto =juego.getLaberinto();
@@ -100,7 +122,7 @@ public class PanelLaberinto extends JPanel implements ActionListener {
                 requestFocusInWindow();
             }
         });
-        mostrarBanner("Nivel " + laberinto.obtenerNivel(), "WASD o flechas para moverte", 3.0);
+        mostrarBanner("Nivel " + laberinto.obtenerNivel(), "WASD para moverte", 3.0);
     }
 
     public void addNotify() {
@@ -137,9 +159,37 @@ public class PanelLaberinto extends JPanel implements ActionListener {
                 enMovimiento = false;
                 progreso = 0;
                 if (juego.jugadorEnMeta()) {
-                    // Provisional: cuando existan los puzzles, aqui debe pasar al estado PUZZLE (RQ09)
+                    // Provisional: cuando existan los puzzles, aqui debe pasar al estado PUZZLE
                     //juego.avanzarNivel();
                     mostrarBanner("Nivel " + juego.getLaberinto().obtenerNivel(), "", 1.4);
+                }
+            }
+        }
+
+        //si no esta caminando, leer las teclas e intentar dar el siguiente paso
+        if (!enMovimiento) {
+            int deltaFila = 0;
+            int deltaColumna = 0;
+            if (control.isArriba()) {deltaFila = -1;}
+            else if (control.isAbajo()) {deltaFila = 1;}
+            else if (control.isIzquierda()) {deltaColumna = -1;}
+            else if (control.isDerecha()) {deltaColumna = 1;}
+
+            if (deltaFila != 0 || deltaColumna != 0) {
+                //gira hacia donde se pulso, aunque haya una pared delante
+                if (deltaFila < 0) {mirada = Direccion.ARRIBA;}
+                else if (deltaFila > 0) {mirada = Direccion.ABAJO;}
+                else if (deltaColumna < 0) {mirada = Direccion.IZQUIERDA;}
+                else {mirada = Direccion.DERECHA;}
+
+                Jugador jugador = juego.getJugador();
+                int filaAnterior = jugador.getFila();
+                int columnaAnterior = jugador.getColumna();
+                if (juego.intentarMover(deltaFila, deltaColumna)) {
+                    origenFila = filaAnterior;
+                    origenColumna = columnaAnterior;
+                    progreso = 0;
+                    enMovimiento = true;
                 }
             }
         }
@@ -240,10 +290,10 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         metaColumna = -1;
         for (int fila = 0; fila < filas; fila++) {
             for (int columna = 0; columna < columnas; columna++) {
-                int celda = laberinto.obtenerCelda(fila, columna);
+                int tipo = laberinto.obtenerCelda(fila, columna); //0 piso, 1 pared, 3 meta
                 int x = columna * celda; //traduce columnas en pixeles
                 int y = fila * celda; //traduce filas en pixeles
-                if (celda == pared) { //paredes o sombra
+                if (tipo == pared) { //paredes o sombra
                     // sombra que la pared
                     if (laberinto.obtenerCelda(fila + 1, columna) != pared) {
                         g.setPaint(new GradientPaint(0, y + celda, new Color(0, 0, 0, 95),
@@ -251,7 +301,7 @@ public class PanelLaberinto extends JPanel implements ActionListener {
                         g.fillRect(x, y + celda, celda, 12);
                     }
                     dibujarPared(g, x, y);
-                } else if (celda == meta) {
+                } else if (tipo == meta) {
                     metaFila = fila;
                     metaColumna = columna;
                 }
@@ -352,11 +402,12 @@ public class PanelLaberinto extends JPanel implements ActionListener {
 
         BufferedImage sprite = segunMirada();
         if (sprite != null) {
-            int alto = (int) (celda * 1.1); // todas las vistas se dibujan a la misma altura
-            int ancho = Math.round(alto * sprite.getWidth() / (float) sprite.getHeight());
+            // el sprite ya viene escalado (prepararSprite): se dibuja 1 a 1 con las botas sobre "pies"
+            int ancho = sprite.getWidth();
+            int alto = sprite.getHeight();
             int x = (int) Math.round(centroX - ancho / 2.0);
-            int y = (int) Math.round(pies - alto - salto) + 2;
-            if (mirada == Direccion.DERECHA) {
+            int y = (int) Math.round(pies - salto - alto * piesAltura) + 2;
+            if (mirada == Direccion.IZQUIERDA) { // el PNG de lado mira a la derecha; para la izquierda se espeja
                 g.drawImage(sprite, x + ancho, y, -ancho, alto, null); // ancho negativo = espejo
             } else {
                 g.drawImage(sprite, x, y, ancho, alto, null);

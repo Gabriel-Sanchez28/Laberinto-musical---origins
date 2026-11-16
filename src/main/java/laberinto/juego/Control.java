@@ -9,7 +9,7 @@ import java.awt.event.KeyListener;
 import java.util.Scanner;
 
 public class Control implements KeyListener {
-    private final static int teclado = 256;
+    private final static int teclado = 65536;
     private final boolean[] teclas = new boolean[teclado];
 
     private boolean arriba, abajo, izquierda, derecha;
@@ -89,7 +89,7 @@ class PanelJuego extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // 1. CLAVE: Llamar a tu método actualizar para refrescar las teclas presionadas
+        // Llamar a tu método actualizar para refrescar las teclas presionadas
         control.actualizar();
 
         // 2. Mover el círculo según los booleanos evaluados
