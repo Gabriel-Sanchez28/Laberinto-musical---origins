@@ -6,6 +6,8 @@ public class Juego {
     private Jugador jugador;
     private Laberinto laberinto;
     private EstadoJuego estado = EstadoJuego.LABERINTO;
+    private static final int filaInicio = 1;
+    private static final int columnaInicio = 1;
 
     public Jugador getJugador() {
         return jugador;
@@ -56,7 +58,11 @@ public class Juego {
     public void seleccionarObra(){}
     public void explorar(){}
     public void procesarPuzzle(){}
-    public void actualizarJuego(){}
+    public void actualizarJuego(){
+        laberinto.siguienteNivel();
+        jugador.cambiarPosicion(filaInicio, columnaInicio);
+    }
     public void finalizar(){}
+
 
 }

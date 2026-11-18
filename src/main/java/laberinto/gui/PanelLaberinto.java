@@ -160,7 +160,7 @@ public class PanelLaberinto extends JPanel implements ActionListener {
                 progreso = 0;
                 if (juego.jugadorEnMeta()) {
                     // Provisional: cuando existan los puzzles, aqui debe pasar al estado PUZZLE
-                    //juego.avanzarNivel();
+                    juego.actualizarJuego();
                     mostrarBanner("Nivel " + juego.getLaberinto().obtenerNivel(), "", 1.4);
                 }
             }
