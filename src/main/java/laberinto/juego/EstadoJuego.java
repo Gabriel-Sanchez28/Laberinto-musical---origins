@@ -1,4 +1,9 @@
 package laberinto.juego;
 
-public class EstadoJuego {
+public enum EstadoJuego {
+    MENU,
+    LABERINTO,
+    PUZZLE,
+    VICTORIA,
+    DERROTA,
 }
