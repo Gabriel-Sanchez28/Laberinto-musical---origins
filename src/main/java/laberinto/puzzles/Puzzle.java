@@ -1,6 +1,6 @@
 package laberinto.puzzles;
 
-public class Puzzle {
+public abstract class Puzzle {
     private String enunciado;
     private int dificultad;
     private int puntos;

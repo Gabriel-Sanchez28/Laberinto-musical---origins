@@ -2,7 +2,7 @@ package laberinto.puzzles;
 
 import laberinto.matematicas.Fracciones;
 
-public class PuzzleFracciones {
+public class PuzzleFracciones extends Puzzle{
     private Fracciones primera;
     private Fracciones segunda;
     private String operacion;
@@ -10,7 +10,7 @@ public class PuzzleFracciones {
 
     public PuzzleFracciones(int numerador1, int denominador1, int numerador2,
                             int denominador2, String operacion, int dificultad, int puntos) {
-        /*super(
+        super(
                 crearEnunciado(
                         numerador1,
                         denominador1,
@@ -20,7 +20,7 @@ public class PuzzleFracciones {
                 ),
                 dificultad,
                 puntos
-        );*/
+        );
 
         if (!operacion.equals("+") && !operacion.equals("-")) {throw new IllegalArgumentException("Operacion no valida.");}
         primera = new Fracciones(numerador1, denominador1);
@@ -63,8 +63,6 @@ public class PuzzleFracciones {
             return false;
         }
     }
-/*
     @Override
     public String obtenerRespuestaCorrecta() {return resultado.toString();}
-*/
 }

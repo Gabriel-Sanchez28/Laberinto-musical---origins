@@ -1,6 +1,8 @@
 package laberinto.gui;
 
+import laberinto.Laberintos.EstadoPuerta;
 import laberinto.Laberintos.Laberinto;
+import laberinto.Laberintos.Puerta;
 import laberinto.juego.Control;
 import laberinto.juego.Juego;
 import laberinto.juego.Jugador;
@@ -52,6 +54,8 @@ public class PanelLaberinto extends JPanel implements ActionListener {
     private final BufferedImage posFrente;
     private final BufferedImage posEspalda;
     private final BufferedImage posLado;
+    private BufferedImage puertaCerrada;
+    private BufferedImage puertaAbierta;
 
     // Capa estatica en memoria
     private BufferedImage capaMapa;
@@ -86,6 +90,11 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         }
     }
 
+    private void cargarAnimacionPuerta() {
+        puertaCerrada = cargarImagen(rutaImagenes + "puerta_cerrada.png");
+        puertaAbierta = cargarImagen(rutaImagenes + "puerta_abierta.png");
+    }
+
     //escala un sprite una sola vez (al cargar) para dibujarlo luego 1 a 1, sin deformarlo
     private static BufferedImage prepararSprite(BufferedImage original) {
         if (original == null) {return null;}
@@ -107,6 +116,7 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         this.posEspalda = prepararSprite(cargarImagen(rutaImagenes + "jugador_espalda.png"));
         this.posFrente = prepararSprite(cargarImagen(rutaImagenes + "jugador_frente.png"));
         this.posLado = prepararSprite(cargarImagen(rutaImagenes + "jugador_lado.png"));
+        cargarAnimacionPuerta();
 
         //dimensiones del laberinto
         Laberinto laberinto =juego.getLaberinto();
@@ -222,6 +232,17 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         g2.translate(0, altoBarraSup);
         g2.drawImage(capaMapa, 0, 0, null);
         if (metaFila >= 0) {dibujarMeta(g2, segundos);}
+
+        //ajuste puerta
+        dibujarPuertas(g2, 0.016);
+
+        dibujarJugador(g2);
+        dibujarBanner(g2, capaMapa.getWidth(), capaMapa.getHeight());
+        g2.translate(0, -altoBarraSup);
+
+        dibujarBarraSuperior(g2, getWidth());
+        g2.dispose();
+
         dibujarJugador(g2);
         //ubicacion del mensaje de nivel
         dibujarBanner(g2, capaMapa.getWidth(), capaMapa.getHeight());
@@ -366,6 +387,50 @@ public class PanelLaberinto extends JPanel implements ActionListener {
         g.draw(rombo(cx, cy, 12 + pulso * 2));
         g.setColor(Gui.CREMA);
         g.fill(rombo(cx, cy, 5));
+    }
+
+    private void dibujarPuertas(Graphics2D g, double dt) {
+        Laberinto laberinto = juego.getLaberinto();
+
+        for (int fila = 0; fila < laberinto.obtenerFilas(); fila++) {
+            for (int columna = 0; columna < laberinto.obtenerColumnas(); columna++) {
+                if (laberinto.esPuerta(fila, columna)) {
+                    Puerta puerta = laberinto.obtenerPuerta(fila, columna);
+                    if (puerta != null) {
+                        // Actualizar animación
+                        puerta.actualizarAnimacion(dt);
+
+                        // Dibujar puerta según estado
+                        dibujarPuertaIndividual(g, puerta, fila, columna);
+                    }
+                }
+            }
+        }
+    }
+
+    private void dibujarPuertaIndividual(Graphics2D g, Puerta puerta, int fila, int columna) {
+        int x = columna * celda;
+        int y = fila * celda;
+
+        BufferedImage sprite;
+        EstadoPuerta estado = puerta.getEstado();
+
+        // Seleccionar sprite según estado
+        if (estado == EstadoPuerta.CERRADA) {
+            sprite = puertaCerrada;
+        } else {
+            sprite = puertaAbierta;
+        }
+
+        // Si no hay imágenes, dibujar rectángulo de respaldo
+        if (sprite == null) {
+            g.setColor(puerta.estaAbierta() ? new Color(139, 69, 19) : new Color(101, 67, 33));
+            g.fillRect(x + 4, y + 4, celda - 8, celda - 8);
+            return;
+        }
+
+        // Dibujar sprite escalado al tamaño de la celda
+        g.drawImage(sprite, x, y, celda, celda, null);
     }
 
     //creacion del icono de diamante
