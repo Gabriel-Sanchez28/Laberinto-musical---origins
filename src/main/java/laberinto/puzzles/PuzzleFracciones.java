@@ -66,5 +66,5 @@ public class PuzzleFracciones {
 /*
     @Override
     public String obtenerRespuestaCorrecta() {return resultado.toString();}
-    */
+*/
 }
