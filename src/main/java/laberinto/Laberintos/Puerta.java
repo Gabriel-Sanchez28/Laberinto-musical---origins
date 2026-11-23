@@ -3,24 +3,18 @@ package laberinto.Laberintos;
 import laberinto.puzzles.Puzzle;
 
 public class Puerta {
-    private Puzzle puzzle;
+    private int fila;
+    private int columna;
     private boolean abierta;
 
-    public boolean isAbierta() {
-        return abierta;
+    public Puerta(int fila, int columna) {
+        this.fila = fila;
+        this.columna = columna;
+        this.abierta = false;
     }
 
-    public boolean resolverPuzzle(Puzzle puzzle){
-        if(puzzle==null){
-            boolean resultado = true;
-            return resultado;
-        }else {
-            boolean resultado = false;
-            return resultado;
-        }
-    }
-
-    public void abrir(){
-        boolean abierta = isAbierta();
-    }
+    public int obtenerFila() {return fila;}
+    public int obtenerColumna() {return columna;}
+    public boolean estaAbierta() {return abierta;}
+    public void abrir() {abierta = true;}
 }

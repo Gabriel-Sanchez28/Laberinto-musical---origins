@@ -1,5 +1,6 @@
 package laberinto.Laberintos;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Laberinto {
@@ -7,27 +8,30 @@ public class Laberinto {
     private int nivel;
     private int filas;
     private int columnas;
+    private ArrayList<Puerta> puertas;
 
     public Laberinto(int filas, int columnas) {
         this.filas = filas;
         this.columnas = columnas;
         this.mapa = new int[filas][columnas];
         this.nivel = 1;
+        this.puertas = new ArrayList<Puerta>();
         generarNuevoMapa();
     }
 
     public void generarNuevoMapa() {
         Random random = new Random();
-        //creacion de bordes
-        for (int i = 0; i < filas; i++) { //filas
-            for (int j = 0; j < columnas; j++) { //columnas
-                if (i == 0 || i == filas - 1 || j == 0 || j == columnas - 1) {
-                    mapa[i][j] = 1; //pared
-                } else {mapa[i][j] = 0;} //espacio libre
+        puertas.clear();
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                if (i == 0 || i == filas - 1
+                        || j == 0 || j == columnas - 1) {
+                    mapa[i][j] = 1;
+                } else {
+                    mapa[i][j] = 0;
+                }
             }
         }
-
-        //obstacylos
         int cantidadObstaculos = nivel + 2;
         for (int i = 0; i < cantidadObstaculos; i++) {
             int fila = random.nextInt(filas - 2) + 1;
@@ -36,11 +40,38 @@ public class Laberinto {
                 mapa[fila][columna] = 1;
             }
         }
-        //limpieza de corredor
+
         for (int j = 1; j < columnas - 1; j++) {mapa[1][j] = 0;}
         for (int i = 1; i < filas - 1; i++) {mapa[i][columnas - 2] = 0;}
-        mapa[1][1] = 0; // inicio
-        mapa[filas - 2][columnas - 2] = 3; // meta
+        mapa[1][1] = 0;
+        mapa[filas - 2][columnas - 2] = 3;
+        int cantidadPuertas = nivel + 1;
+        for (int i = 0; i < cantidadPuertas; i++) {
+            int columna = i + 2;
+            if (columna < columnas - 2) {crearPuerta(1, columna);}
+        }
+    }
+
+    private void crearPuerta(int fila, int columna) {
+        Puerta puerta = new Puerta(fila, columna);
+        puertas.add(puerta);
+        mapa[fila][columna] = 2;
+    }
+
+    public Puerta obtenerPuerta(int fila, int columna) {
+        for (Puerta puerta : puertas) {
+            if (puerta.obtenerFila() == fila && puerta.obtenerColumna() == columna) {return puerta;}
+        }
+        return null;
+    }
+
+    public boolean esPuerta(int fila, int columna) {return obtenerCelda(fila, columna) == 2;}
+    public void abrirPuerta(int fila, int columna) {
+        Puerta puerta = obtenerPuerta(fila, columna);
+        if (puerta != null) {
+            puerta.abrir();
+            mapa[fila][columna] = 0;
+        }
     }
 
     public void siguienteNivel() {
@@ -58,26 +89,15 @@ public class Laberinto {
         return celda == 0 || celda == 3;
     }
 
-    public boolean esMeta(int fila, int columna) {
-        return obtenerCelda(fila, columna) == 3;
+    public boolean esMeta(int fila, int columna) {return obtenerCelda(fila, columna) == 3;}
+    public int obtenerFilas() {return filas;}
+    public int obtenerColumnas() {return columnas;}
+    public int obtenerNivel() {return nivel;}
+    public boolean todasLasPuertasAbiertas() {
+        for (Puerta puerta : puertas) {
+            if (!puerta.estaAbierta()) {return false;}
+        }
+        return true;
     }
-
-    public int obtenerFilas() {
-        return filas;
-    }
-
-    public int obtenerColumnas() {
-        return columnas;
-    }
-
-    public int obtenerNivel() {
-        return nivel;
-    }
-
-    public void cargarMapa(){}
-
-    public void limpiarMapa(){}
-
-    public void colocarjugador(){}
 
 }
