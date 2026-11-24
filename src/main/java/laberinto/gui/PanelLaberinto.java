@@ -91,13 +91,15 @@ public class PanelLaberinto extends JPanel implements ActionListener {
     }
 
     private void cargarAnimacionPuerta() {
-        puertaCerrada = cargarImagen(rutaImagenes + "puerta_cerrada.png");
-        puertaAbierta = cargarImagen(rutaImagenes + "puerta_abierta.png");
+        puertaCerrada = cargarImagen(rutaImagenes + "PuertaCerrada.png");
+        puertaAbierta = cargarImagen(rutaImagenes + "PuertaAbierta.png");
     }
 
     //escala un sprite una sola vez (al cargar) para dibujarlo luego 1 a 1, sin deformarlo
     private static BufferedImage prepararSprite(BufferedImage original) {
-        if (original == null) {return null;}
+        if (original == null) {
+            return null;
+        }
         double escala = (celda * 1.1) / (original.getHeight() * personajeAlto);
         int ancho = (int) Math.round(original.getWidth() * escala);
         int alto = (int) Math.round(original.getHeight() * escala);
